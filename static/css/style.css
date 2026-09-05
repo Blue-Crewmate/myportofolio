@@ -60,8 +60,14 @@ h1, .brand {
     font-size: 0.95rem;
 }
 
-.hero {
-    padding: 4.5rem 0 5rem;
+/* Allowing multiple sections in the main */
+main {
+    display: flex;
+    flex-direction: column;
+}
+
+.hero, .skill {
+    padding: 4.5rem 0 3rem;
 }
 
 .hero-grid {
@@ -140,6 +146,52 @@ h1, .brand {
 .social-link:hover {
     background-color: var(--accent);
 }
+
+.skill-grid {
+    display: grid;
+    grid-template-areas:
+        'skilltitle skilltitle skilltitle'
+        'python  java  unity';
+    gap: 1.5rem 3rem;
+}
+
+.skilltitle {
+    grid-area: skilltitle;
+}
+
+.skilltitle h1 {
+    color: var(--ink);
+    font-size: clamp(3rem, 4vw, 5rem);
+    text-align: center;
+    line-height: 0.95;
+}
+
+.python {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+    grid-area: python;
+}
+
+.java {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+    grid-area: java;
+}
+
+.unity {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+    grid-area: unity;
+}
+
+.python h2, .java h2, .unity h2 {
+    text-align: center;
+    font-size: clamp(1.5rem, vw, 2.5rem);
+}
+
 
 .hero-photo {
     grid-area: photo;
