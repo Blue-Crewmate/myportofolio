@@ -7,6 +7,7 @@
 :root {
     --ink: #1c1917;
     --paper: #faf6f0;
+    --dark-paper: #f7ede3;
     --accent: #d95d39;
     --accent-dark: #a8442a;
     --line: #e3d9c9;
@@ -66,8 +67,12 @@ main {
     flex-direction: column;
 }
 
-.hero, .skill {
+section {
     padding: 4.5rem 0 3rem;
+}
+
+.skill {
+    background-color: var(--dark-paper);
 }
 
 .hero-grid {
@@ -149,6 +154,7 @@ main {
 
 .skill-grid {
     display: grid;
+    grid-template-columns: repeat(3, 1fr);
     grid-template-areas:
         'skilltitle skilltitle skilltitle'
         'python  java  unity';
@@ -170,6 +176,8 @@ main {
     display: flex;
     flex-direction: column;
     row-gap: 1rem;
+    align-self: center;
+    position: relative;
     grid-area: python;
 }
 
@@ -192,6 +200,15 @@ main {
     font-size: clamp(1.5rem, vw, 2.5rem);
 }
 
+.code-photo {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: var(--radius);
+    border: 3px solid var(--ink);
+}
 
 .hero-photo {
     grid-area: photo;
@@ -235,6 +252,20 @@ main {
             "identity"
             "photo"
             "details";
+    }
+
+    .skill-grid {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            'skilltitle'
+            'python'
+            'java'
+            'unity';
+    }
+
+    .code-photo {
+        width: 80%;
+        align-self: center;
     }
 
     .hero-photo {
