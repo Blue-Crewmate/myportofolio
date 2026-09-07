@@ -238,6 +238,35 @@ section {
     border: 3px solid var(--ink);
 }
 
+.music-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    grid-template-areas:
+        'music-title music-list';
+    gap: 1.5rem 3rem;
+}
+
+.music-title {
+    grid-area: music-title;
+    font-size: 4.5rem;
+}
+
+.music-list {
+    grid-area: music-list;
+    display: flex;
+    flex-direction: column;
+    row-gap: 1.5rem;
+}
+
+.music-audio {
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.music-list h3 {
+    color: var(--accent-dark)
+}
+
 .site-footer {
     padding: 1.5rem;
     color: var(--text-muted);
@@ -261,6 +290,13 @@ section {
             'python'
             'java'
             'unity';
+    }
+
+    .music-grid {
+        grid-template-columns: 1fr;
+        grid-template-areas: 
+            'music-title'
+            'music-list';
     }
 
     .code-photo {
