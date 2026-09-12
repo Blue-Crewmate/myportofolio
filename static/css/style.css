@@ -61,8 +61,7 @@ h1, .brand {
     font-size: 0.95rem;
 }
 
-/* Allowing multiple sections in the main */
-main {
+main {            /* Allowing multiple sections in the main */
     display: flex;
     flex-direction: column;
 }
@@ -71,10 +70,24 @@ section {
     padding: 4.5rem 0 3rem;
 }
 
-.project {
-    background-color: var(--dark-paper);
+.site-footer {
+    padding: 1.5rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--line);
 }
 
+.thumbnail-photo {
+    position: relative;
+    display: block;
+    width: 60%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: var(--radius);
+    border: 2px solid var(--ink);
+}
+
+/* Hero Section Styles */
 .hero-grid {
     display: grid;
     grid-template-columns: 1.3fr 1fr;
@@ -152,64 +165,6 @@ section {
     background-color: var(--accent);
 }
 
-.project-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-areas:
-        'projecttitle projecttitle projecttitle'
-        'python  java  unity';
-    gap: 1.5rem 3rem;
-}
-
-.projecttitle {
-    grid-area: projecttitle;
-}
-
-.projecttitle h1 {
-    color: var(--ink);
-    font-size: clamp(3rem, 4vw, 5rem);
-    text-align: center;
-    line-height: 0.95;
-}
-
-.python {
-    display: flex;
-    flex-direction: column;
-    row-gap: 1rem;
-    align-self: center;
-    position: relative;
-    grid-area: python;
-}
-
-.java {
-    display: flex;
-    flex-direction: column;
-    row-gap: 1rem;
-    grid-area: java;
-}
-
-.unity {
-    display: flex;
-    flex-direction: column;
-    row-gap: 1rem;
-    grid-area: unity;
-}
-
-.python h2, .java h2, .unity h2 {
-    text-align: center;
-    font-size: clamp(1.5rem, vw, 2.5rem);
-}
-
-.code-photo {
-    position: relative;
-    display: block;
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    border-radius: var(--radius);
-    border: 3px solid var(--ink);
-}
-
 .hero-photo {
     grid-area: photo;
     align-self: center;
@@ -237,6 +192,10 @@ section {
     border-radius: var(--radius);
     border: 3px solid var(--ink);
 }
+
+/* End of Hero Section Styles */
+
+/* Discography Section Styles */
 
 .music-grid {
     display: grid;
@@ -267,12 +226,9 @@ section {
     color: var(--accent-dark)
 }
 
-.site-footer {
-    padding: 1.5rem;
-    color: var(--text-muted);
-    font-size: 0.85rem;
-    border-top: 1px solid var(--line);
-}
+/* End of Discography Section Styles */
+
+/* Experience Section Styles */
 
 .experience-section {
     padding: 4rem 0;
@@ -328,6 +284,53 @@ section {
     font-weight: 600;
 }
 
+/* End of Experience Section Styles */
+
+/* Project Section Styles */
+
+.project-section {
+    background-color: var(--dark-paper);
+    padding: 4rem 0;
+    border-top: 1px solid var(--line);
+}
+
+.project-section h1 {
+    margin: 0.4rem 0 1.5rem;
+    font-size: 2rem;
+}
+
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+}
+
+.project-card {
+    padding: 1.25rem;
+    background-color: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+}
+
+.project-card h2 {
+    margin: 0.5rem 0;
+    font-size: 1.25rem;
+}
+
+.project-description {
+    color: var(--text-muted);
+}
+
+.project-status {
+    color: var(--accent-dark);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+/* End of Project Section Styles */
+
+/* Flexible Mobile Style */
 @media (max-width: 600px) {
     .hero-grid {
         grid-template-columns: 1fr;
@@ -337,25 +340,11 @@ section {
             "details";
     }
 
-    .project-grid {
-        grid-template-columns: 1fr;
-        grid-template-areas:
-            'projecttitle'
-            'python'
-            'java'
-            'unity';
-    }
-
     .music-grid {
         grid-template-columns: 1fr;
         grid-template-areas: 
             'music-title'
             'music-list';
-    }
-
-    .code-photo {
-        width: 80%;
-        align-self: center;
     }
 
     .hero-photo {

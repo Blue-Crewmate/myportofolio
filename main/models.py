@@ -2,10 +2,6 @@ import uuid
 from django.db import models
 
 # Create your models here.
-class Mahasiswa(models.Model):
-    nama = models.CharField(max_length=30)
-    npm = models.CharField(max_length=10)
-    
 class Experience(models.Model):
     EXPERIENCE_CHOICES = [
         ('internship', 'Internship'),
@@ -25,7 +21,34 @@ class Experience(models.Model):
     ended_at = models.DateTimeField(blank=True, null=True)
     def __str__(self):
         return self.title
+
+    @property
+    def contain_photo(self):
+        return self.thumbnail != None
     
     @property
     def is_ongoing(self):
         return self.ended_at is None
+
+class Project(models.Model):
+    PROJECT_STATUS = [
+        ('ongoing', 'Ongoing'),
+        ('completed', 'Completed'),
+    ]
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    thumbnail = models.URLField(blank=True, null=True)
+    collaborators = models.TextField(blank=True)
+    status = models.CharField(max_length=20, choices=PROJECT_STATUS, default='completed')
+    def __str__(self):
+        return self.title
+
+    @property
+    def contain_photo(self):
+        return self.thumbnail != None
+    
+    @property
+    def is_ongoing(self):
+        return self.status == 'ongoing'
