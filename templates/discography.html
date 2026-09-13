@@ -23,36 +23,36 @@
     </header>
 
     <main>
-        <section class="experience-section" id="experience">
+        <section class="discography-section" id="discography">
             <div class="container">
-                <p class="section-kicker">Perjalanan saya sejauh ini</p>
-                <h1>Experiences</h1>
+                <p class="section-kicker">Technically A Music List</p>
+                <h1>Discography</h1>
 
-                <div class="experience-grid">
-                    {% for experience in experience_list %}
-                        <article class="experience-card">
-                            <span class="experience-category">
-                                {{ experience.get_category_display }}
+                <div class="discography-grid">
+                    {% for music in music_list %}
+                        <article class="discography-card">
+                            <span class="discography-genre">
+                                {{ music.get_genre_display }}
                             </span>
-                            <h2>{{ experience.title }}</h2>
-                            <p class="experience-description">
-                                {{ experience.description }}
+                            <h2>{{ music.title }}</h2>
+                            <p class="discography-description">
+                                {{ music.description }}
                             </p>
-
-                            {% if experience.contain_photo %}
+                            {% if music.contain_audio %}
                                 <br>
-                                <img class="thumbnail-photo" src="{{ experience.thumbnail }}" alt="Photo of Experience">
-                            {% endif %}
-
-                            {% if experience.is_ongoing %}
-                                <p class="experience-status">Sedang berlangsung</p>
-                            {% else %}
-                                <p class="experience-status">Selesai</p>
+                                <iframe width="560" height="315" 
+                                    src="{{ music.audio }}" 
+                                    title="YouTube video player" 
+                                    frameborder="0" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                    referrerpolicy="strict-origin-when-cross-origin" 
+                                    allowfullscreen>
+                                </iframe>
                             {% endif %}
                         </article>
                     {% empty %}
                         <p class="empty-state">
-                            Belum ada pengalaman yang ditambahkan.
+                            Belum ada lagu yang ditambahkan.
                         </p>
                     {% endfor %}
                 </div>

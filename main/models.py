@@ -52,3 +52,25 @@ class Project(models.Model):
     @property
     def is_ongoing(self):
         return self.status == 'ongoing'
+
+class Music(models.Model):
+    GENRE_CHOICES = [
+            ('pop', 'Pop'),
+            ('rock', 'Rock'),
+            ('jazz', 'Jazz'),
+            ('funk', 'Funk'),
+            ('classical', 'Classical'),
+            ('swing', 'Swing'),
+        ]
+    
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    genre = models.CharField(max_length=20, choices=GENRE_CHOICES, default='pop')
+    audio = models.URLField(blank=True, null=True)
+    def __str__(self):
+        return self.title
+
+    @property
+    def contain_audio(self):
+        return self.audio != None

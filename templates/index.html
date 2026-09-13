@@ -16,7 +16,7 @@
             <nav>
                 <a href="{% url 'main:show_main' %}">Profile</a>
                 <a href="{% url 'main:show_project' %}">Projects</a>
-                <a href="#discography">Discography</a>
+                <a href="{% url 'main:show_discography' %}">Discography</a>
                 <a href="{% url 'main:show_experience' %}">Experience</a>
             </nav>
         </div>
@@ -49,25 +49,6 @@
                         <a href="https://github.com/Blue-Crewmate/" class="social-link">GitHub</a>
                         <a href="https://www.linkedin.com/in/justin-lie-csui25/" class="social-link">LinkedIn</a>
                         <a href="mailto:justin.lie2247@gmail.com" class="social-link">Email</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section class="discography" id="discography">
-            <div class="container music-grid">
-                <h1 class="music-title">Discography</h1>
-                <div class="music-list">
-                    <div class="music-audio">
-                        <h3>Dua Macam Orang</h3>
-                        <audio controls loop src="static\audio\Dua Macam Orang.mp3" alt="sample music"></audio>
-                    </div>
-                    <div class="music-audio">
-                        <h3>Marilah ke Vihara</h3>
-                        <audio controls loop src="static\audio\Marilah Ke Vihara.mp3" alt="sample music"></audio>
-                    </div>
-                    <div class="music-audio">
-                        <h3>Waisak yang Indah</h3>
-                        <audio controls loop src="static\audio\Waisak Yang Indah.mp3" alt="sample music"></audio>
                     </div>
                 </div>
             </div>

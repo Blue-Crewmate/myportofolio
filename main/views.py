@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from main.models import Experience, Project
+from main.models import Experience, Project, Music
 # Create your views here.
 
 def show_main(request):
@@ -13,6 +13,13 @@ def show_main(request):
         ),
     }
     return render(request, "index.html", context)
+
+def show_discography(request):
+    context = {
+        "name": "Justin Lie",
+        "music_list": Music.objects.all(),
+        }
+    return render(request, "discography.html", context)
 
 def show_experience(request):
     context = {

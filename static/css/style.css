@@ -197,33 +197,52 @@ section {
 
 /* Discography Section Styles */
 
-.music-grid {
-    display: grid;
-    grid-template-columns: 1fr 1.3fr;
-    grid-template-areas:
-        'music-title music-list';
-    gap: 1.5rem 3rem;
+.discography-section {
+    padding: 4rem 0;
+    border-top: 1px solid var(--line);
 }
 
-.music-title {
-    grid-area: music-title;
-    font-size: 4.5rem;
+.section-kicker {
+    color: var(--accent-dark);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
 }
 
-.music-list {
-    grid-area: music-list;
+.discography-section h1 {
+    margin: 0.4rem 0 1.5rem;
+    font-size: 2rem;
+}
+
+.discography-grid {
     display: flex;
     flex-direction: column;
-    row-gap: 1.5rem;
+    gap: 1rem;
 }
 
-.music-audio {
-    display: grid;
-    grid-template-columns: 1fr;
+.discography-card {
+    padding: 1.25rem;
+    background-color: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
 }
 
-.music-list h3 {
-    color: var(--accent-dark)
+.discography-genre {
+    color: var(--accent-dark);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.discography-card h2 {
+    margin: 0.5rem 0;
+    font-size: 1.25rem;
+}
+
+.discography-description,
+.empty-state {
+    color: var(--text-muted);
 }
 
 /* End of Discography Section Styles */
