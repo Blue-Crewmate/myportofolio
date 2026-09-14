@@ -40,3 +40,18 @@ Result:
 >- On mid-sized screens (tablets/laptops): 7vw falls between 3rem and 5rem, so the element scales smoothly and dynamically as you resize the window.
 >
 >- On large screens (desktops): 7vw exceeds 5rem, so the browser caps the value at 5rem.
+
+### Tugas 2
+
+1. Saat pengguna membuka halaman portofolio baru, requestnya akan diarahkan ke urls.py dari project tersebut untuk mendapatkan semua alamat page dalam website tersebut. Dalam urls.py project, landing page ("") dari project memiliki fungsi "include()" yang merujuk kepada urls.py app main. Dengan fungsi include tersebut, url pada urls.py app akan terhubung kepada urls.py di project. Saat hendak berpindah page/url, pemanggilan url tersebut akan merujuk pada suatu function di views.py. Function tersebut akan mengambil data dari models dan lalu me-render template page yang sudah disediakan dengan data dari model. Hasil akhir template tersebut melewati kembali views.py, urls.py di app, urls.py di project dan akhirnya akan dikirimkan kembali ke browser pengguna untuk ditampilkan.
+
+2. Data untuk website memang sebaiknya disimpan di models daripada template, karena penggunaan models adalah untuk menyimpan data dari suatu objek, seperti project. Seiring waktu, jumlah project yang akan dibangun akan meningkat sehingga perlu ada penyesuaian pada website. Apabila template digunakan untuk menyimpan data, syntax yang sama perlu di ulang berkali-kali untuk menyimpan data project baru. Alhasil, template akan terlihat kurang rapi. Di sisi lain, apabila data disimpan di dalam models, website dapat lebih mudah dikembangkan dan kode html di template menjadi lebih rapi. 
+
+3. "makemigrations" di Django adalah command untuk menyiapkan file untuk melakukan migration suatu model ke project, sedangkan "migrate" adalah command untuk mengeksekusi file tersebut terhadap proyek. Ibaratnya, "makemigration" adalah prosedur untuk mengcompile suatu program ke "machine executable file" dan "migrate" adalah prosedur untuk menjalankan "machine executable file" tersebut. Sebagai contoh, dalam sebuah models "Project", kita ingin menambahkan field baru berupa tanggal mulai. Agar field tersebut dapat diimplementasikan dalam Django project, kita perlu menjalankan command "makemigrations" untuk membuat file yang dapat dieksekusi ke Django, lalu menjalankan "migrate" untuk menjalankan file tersebut.
+
+#### AI Disclosure
+
+Selama pengerjaan tugas 2 ini, saya menggunakan ChatGPT sebagai alat bantu, dimana saya terbantu olehnya dalam memahami konsep MVT dan bagaimana untuk mengimplementasinya di Django. Selama menggunakan AI tersebut, saya melakukan prompting untuk memahami konsep dari alur MVT dan tidak memintanya untuk membantu dalam pembuatan HTML secara langsung.
+
+Berikut tertera salah satu hasil prompting yang saya lakukan ke ChatGPT:
+>https://chatgpt.com/share/6aa6dbf0-e6f4-83ec-8547-aea1d912e9f9 
