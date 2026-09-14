@@ -31,7 +31,7 @@ SECRET_KEY = 'django-insecure-yf0%b9=8$!!8gdj2@%9&3x4a_p2*fv_udwtj+$^*$d*f1fc%wa
 DEBUG = True
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://justin-lie-myportofolio.pws.cs.ui.ac.id/",
+    "https://justin-lie-myportofolio.pws.cs.ui.ac.id",
 ]
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
