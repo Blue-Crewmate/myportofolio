@@ -30,6 +30,12 @@ SECRET_KEY = 'django-insecure-yf0%b9=8$!!8gdj2@%9&3x4a_p2*fv_udwtj+$^*$d*f1fc%wa
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://justin-lie-myportofolio.pws.cs.ui.ac.id/",
+]
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "justin-lie-myportofolio.pws.cs.ui.ac.id"]
 
 PRODUCTION = os.getenv('PRODUCTION', 'False').lower() == 'true'
