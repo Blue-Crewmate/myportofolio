@@ -39,7 +39,9 @@ class Project(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=255)
     description = models.TextField()
-    thumbnail = models.URLField(blank=True, null=True)
+    tech_stack = models.CharField(max_length=255, default='IT')
+    project_url = models.URLField(blank=True, null=True)
+    project_image_url = models.URLField(blank=True, null=True)
     collaborators = models.TextField(blank=True)
     status = models.CharField(max_length=20, choices=PROJECT_STATUS, default='completed')
     def __str__(self):
@@ -47,7 +49,7 @@ class Project(models.Model):
 
     @property
     def contain_photo(self):
-        return self.thumbnail != None
+        return self.project_image_url != None
     
     @property
     def is_ongoing(self):
