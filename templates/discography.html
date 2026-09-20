@@ -4,24 +4,34 @@
 {% endblock meta %}
 {% block content %}
     <main>
-        <section class="discography-section" id="discography">
+        <section class="experience-section" id="experience">
             <div class="container">
                 <p class="section-kicker">Technically A Music List</p>
-                <h1>Discography</h1>
-
-                <div class="discography-grid">
-                    {% for music in music_list %}
-                        <article class="discography-card">
-                            <span class="discography-genre">
-                                {{ music.get_genre_display }}
-                            </span>
-                            <h2>{{ music.title }}</h2>
-                            <p class="discography-description">
-                                {{ music.description }}
-                            </p>
+                <div class="project-header">
+                    <h1>Discography</h1>
+                    <a href="{% url 'main:create_discography' %}"
+                       class="button project-add-button">
+                        <span aria-hidden="true">+</span>
+                        Tambah Lagu
+                    </a>
+                </div>
+                <form method="get"
+                      action="{% url 'main:show_discography' %}"
+                      class="project-search">
+                    <input type="search"
+                           name="title"
+                           value="{{ title_query }}"
+                           placeholder="Cari berdasarkan nama lagu"
+                           class="project-search__input"
+                           aria-label="Cari berdasarkan nama lagu">
+                    <button type="submit" class="button">Cari</button>
+                </form>
+                <div class="experience-grid project-grid">
+                    {% for music in discography_list %}
+                        <article class="experience-card">
                             {% if music.contain_audio %}
                                 <br>
-                                <iframe width="560" height="315" 
+                                <iframe width="400" height="280" 
                                     src="{{ music.audio }}" 
                                     title="YouTube video player" 
                                     frameborder="0" 
@@ -30,11 +40,24 @@
                                     allowfullscreen>
                                 </iframe>
                             {% endif %}
+                            <h2>{{ music.title }}</h2>
+                            <span class="experience-category">{{ music.genre }}</span>
+                            <p class="experience-description">{{ music.description }}</p>
+                            <div class="project-card-actions">
+                                <div class="project-actions">
+                                    {% include "components/discography_delete_modal.html" with music=music %}
+                                    <a href="{% url 'main:edit_discography' music.id %}" class="button button-secondary">
+                                        Edit
+                                    </a>
+                                </div>
+                            </div>
                         </article>
                     {% empty %}
-                        <p class="empty-state">
-                            Belum ada lagu yang ditambahkan.
-                        </p>
+                        {% if title_query %}
+                            <p class="empty-state">Tidak ada lagu dengan nama tersebut.</p>
+                        {% else %}
+                            <p class="empty-state">Belum ada lagu yang ditambahkan.</p>
+                        {% endif %}
                     {% endfor %}
                 </div>
             </div>

@@ -1,6 +1,6 @@
 from django.forms import ModelForm, TextInput, Textarea, URLInput, Select, DateInput
 
-from main.models import Project, Experience
+from main.models import Project, Experience, Music
 
 class ProjectForm(ModelForm):
     class Meta:
@@ -115,4 +115,47 @@ class ExperienceForm(ModelForm):
                 }
             ),
             
+        }
+
+class DiscographyForm(ModelForm):
+    class Meta:
+        model = Music
+        fields = [
+            "title",
+            "description",
+            "genre",
+            "audio",
+        ]
+
+        labels = {
+            "title": "Nama Lagu",
+            "description": "Deskripsi Lagu",
+            "genre": "Genre",
+            "audio": "Youtube Song URL",
+        }
+
+        widgets = {
+            "title": TextInput(
+                attrs={
+                    "placeholder": "Nama Lagu",
+                    "maxlength": 255,
+                }
+            ),
+            "description": Textarea(
+                attrs={
+                    "placeholder": "Deskripsikan Lagu",
+                    "rows": 3,
+                }
+            ),
+            "genre": Select(
+                attrs={
+                    "placeholder": "Pilih genre lagu",
+                }
+            ),
+            "audio": URLInput(
+                attrs={
+                    "placeholder": "https://www.youtube.com/embed/...",
+                }
+            ),
+
         }
