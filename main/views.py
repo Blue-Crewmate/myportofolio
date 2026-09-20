@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
 from main.models import Experience, Project, Music
-from main.forms import ProjectForm
+from main.forms import ProjectForm, ExperienceForm
 # Create your views here.
 
 def show_main(request):
@@ -26,13 +26,59 @@ def show_discography(request):
         }
     return render(request, "discography.html", context)
 
+# Experience Views
 def show_experience(request):
+    json_response = get_experience_json(request)
+    
+    experiences = serializers.deserialize(
+        "json",
+        json_response.content.decode("utf-8"),
+    )
+    experiences = [experience.object for experience in experiences]
+    title_query = request.GET.get("title", "").strip()
+    
     context = {
         "name": "Justin Lie",
-        "experience_list": Experience.objects.all(),
+        "experience_list": experiences,
+        "title_query": title_query,
     }
     return render(request, "experience.html", context)
 
+def create_experience(request):
+    form = ExperienceForm(request.POST or None)
+
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Pengalaman baru berhasil ditambahkan!")
+        return redirect("main:show_experience")
+
+    context = {
+        "name": "Justin Lie",
+        "form": form,
+    }
+    return render(request, "experience_form.html", context)
+
+def get_experience_json(request):
+    title_query = request.GET.get("title", "").strip()
+    experiences = Experience.objects.all()
+
+    if title_query:
+        experiences = experiences.filter(title__icontains=title_query)
+
+    experiences_json = serializers.serialize("json", experiences)
+    return HttpResponse(experiences_json, content_type="application/json")
+
+def delete_experience(request, experience_id):
+    experience = get_object_or_404(Experience, pk=experience_id)
+
+    if request.method == "POST":
+        experience.delete()
+        messages.success(request, "Experience berhasil dihapus!")
+        return redirect("main:show_experience")
+
+    return redirect("main:show_experience")
+
+# Project Views
 def show_projects(request):
     json_response = get_projects_json(request)
 
@@ -59,7 +105,7 @@ def create_project(request):
         return redirect("main:show_projects")
 
     context = {
-        "name": "Burhan",
+        "name": "Justin Lie",
         "form": form,
     }
     return render(request, "projects_form.html", context)
