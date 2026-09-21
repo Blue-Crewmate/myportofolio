@@ -55,3 +55,18 @@ Selama pengerjaan tugas 2 ini, saya menggunakan ChatGPT sebagai alat bantu, dima
 
 Berikut tertera salah satu hasil prompting yang saya lakukan ke ChatGPT:
 >https://chatgpt.com/share/6aa6dbf0-e6f4-83ec-8547-aea1d912e9f9 
+
+### Tugas 3
+
+1. ModelForm digunakan pada Django karena sudah terintegrasi dengan Model yang sudah terdefinisi terlebih dahulu pada Django. Dengan fitur integrasi tersebut, kita tidak perlu melakukan validasi ulang terhadap input-input yang akan dimasukkan pada form. Pada saat form digenerate, field-field pada model akan dengan otomatis dibuat input fieldnya oleh ModelForm. Selain itu, csrf token wajib ditambahkan dalam form tersebut karena token tersebut merupakan salah satu sistem keamanan wesbite Django. Dengan menggunakan csrf token, kita dapat memastikan bahwa request POST hanya dapat dilakukan dari website yang memiliki token tersebut dan mencegah adanya request POST yang masuk ke dalam models dari pihak eksternal.
+
+2. JSON lebih disukai dalam pengembangan aplikasi web modern dibandingkan XML karena formatnya yang lebih sederhana dan mudah dibaca. Pada JSON, data-datanya tersusun dalam bentuk map, dimana setiap data merupakan "key:value" pair. Dengan bentuk key:value tersebut, data-data dapat dengan lebih mudah dicari untuk diapply kedalam template html yang sudah dibuat. Selain itu, JSON file memiliki ukuran data yang lebih kecil sehingga lebih cepat untuk dikirim.
+
+3. Sebagai contoh pada saat browser memanggil fungsi show_projects() dari views.py, show_projects() akan memanggil funsgi get_projects_json() yang akan mengambil data-data dari model dan mengubah menjadi JSON format. Akan tetapi, JSON format tidak dapat dikirim secara langsung kepada client browser, sehingga format tersebut perlu diserialize terlebih dahulu agar dapat dikirimkan ke client lewat HTTPResponse. Pada saat data sudah sampai pada client, fungsi show_projects akan meng-deserialize file JSON tersebut agar data yang dikirimkan dapat dibaca oleh browser client dan ditunjukkan pada website.
+
+#### AI Disclosure
+
+Selama pengerjaan tugas 3 ini, saya menggunakan ChatGPT sebagai alat bantu, dimana saya terbantu olehnya dalam memahami cara mengimplementasi fungsi update data pada models dan forms di Django. Selama menggunakan AI tersebut, saya melakukan prompting dengan langsung meminta penjelasan untuk bagaimana alur melakukan update data. Walaupun saya terbantu dengan AI untuk membuat kode HTML tersebut, saya tetap melakukan cross cek dengan dokumentasi pada Django serta w3school untuk memastikan bahwa saya paham cara kerja dibalik kode yang dibuat oleh ChatGPT.
+
+Berikut tertera salah satu hasil prompting yang saya lakukan ke ChatGPT:
+>https://chatgpt.com/share/6ab0a709-cf84-83ec-90ae-1a7f53cfc033 
