@@ -9,11 +9,13 @@
                 <p class="section-kicker">Technically A Music List</p>
                 <div class="project-header">
                     <h1>Discography</h1>
-                    <a href="{% url 'main:create_discography' %}"
-                       class="button project-add-button">
-                        <span aria-hidden="true">+</span>
-                        Tambah Lagu
-                    </a>
+                    {% if user.is_superuser %}
+                        <a href="{% url 'main:create_discography' %}"
+                        class="button project-add-button">
+                            <span aria-hidden="true">+</span>
+                            Tambah Lagu
+                        </a>
+                    {% endif %}
                 </div>
                 <form method="get"
                       action="{% url 'main:show_discography' %}"
@@ -45,10 +47,15 @@
                             <p class="experience-description">{{ music.description }}</p>
                             <div class="project-card-actions">
                                 <div class="project-actions">
-                                    {% include "components/discography_delete_modal.html" with music=music %}
-                                    <a href="{% url 'main:edit_discography' music.id %}" class="button button-secondary">
-                                        Edit
-                                    </a>
+                                    {% include "components/discography_star.html" with music=music %}
+                                    {% if user.is_superuser %}
+                                        {% include "components/discography_delete_modal.html" with music=music %}
+                                    {% endif %}
+                                    {% if is_editor %}
+                                        <a href="{% url 'main:edit_discography' music.id %}" class="button button-secondary">
+                                            Edit
+                                        </a>
+                                    {% endif %}
                                 </div>
                             </div>
                         </article>

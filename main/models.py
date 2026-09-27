@@ -21,6 +21,9 @@ class Experience(models.Model):
     thumbnail = models.URLField(blank=True, null=True)
     started_at = models.DateTimeField(auto_now_add=True)
     ended_at = models.DateTimeField(blank=True, null=True)
+    starred_by = models.ManyToManyField(
+        User, related_name="starred_experiences", blank=True
+    )
     def __str__(self):
         return self.title
 
@@ -75,6 +78,9 @@ class Music(models.Model):
     description = models.TextField()
     genre = models.CharField(max_length=20, choices=GENRE_CHOICES, default='pop')
     audio = models.URLField(blank=True, null=True)
+    starred_by = models.ManyToManyField(
+        User, related_name="starred_musics", blank=True
+    )
     def __str__(self):
         return self.title
 
