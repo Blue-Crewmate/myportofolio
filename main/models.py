@@ -1,4 +1,6 @@
 import uuid
+
+from django.contrib.auth.models import User
 from django.db import models
 
 # Create your models here.
@@ -44,6 +46,9 @@ class Project(models.Model):
     project_image_url = models.URLField(blank=True, null=True)
     collaborators = models.TextField(blank=True)
     status = models.CharField(max_length=20, choices=PROJECT_STATUS, default='completed')
+    starred_by = models.ManyToManyField(
+        User, related_name="starred_projects", blank=True
+    )
     def __str__(self):
         return self.title
 

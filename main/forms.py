@@ -1,5 +1,4 @@
 from django.forms import ModelForm, TextInput, Textarea, URLInput, Select, DateInput
-
 from main.models import Project, Experience, Music
 
 class ProjectForm(ModelForm):
