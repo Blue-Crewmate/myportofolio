@@ -70,3 +70,12 @@ Selama pengerjaan tugas 3 ini, saya menggunakan ChatGPT sebagai alat bantu, dima
 
 Berikut tertera salah satu hasil prompting yang saya lakukan ke ChatGPT:
 >https://chatgpt.com/share/6ab0a709-cf84-83ec-90ae-1a7f53cfc033 
+
+### Tugas 4
+
+#### AI Disclosure
+
+Dalam pengerjaan tugas 4 ini, saya menggunakan ChatGPT sebagai alat bantu dalam memahami cara mengimplementasikan batasan terhadap group editor yang telah dibuat di web admin Django. Pada AI, saya langsung memintamya bagaimana melakukan implementasi tersebut, akan tetapi terjadi sebuah error pada kode yang diberikan oleh AI, sehingga saya perlu melakukan cross-checking dengan dokumentasi django dan tutorial pada web PBP. Alhasil, saya menyadari bahwa untuk menerapkan group filtering pada html untuk menghilangkan tombol, saya perlu membuat sebuah key:value boolean baru dari context dictionary pada views.py agar nilai filtering group python dapat digunakkan pada page template html.
+
+Berikut tertera salah satu hasil prompting yang saya lakukan ke ChatGPT:
+>https://chatgpt.com/share/6aba17d1-e750-83ec-971d-f459d28efbc8

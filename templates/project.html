@@ -16,6 +16,9 @@
                             Tambah Proyek
                         </a>
                     {% endif %}
+                    <button class="button button-secondary" onclick="showToast('Notifikasi Sistem', 'Project berhasil dimuat dengan baik!', 'success')">
+                        Test Toast Notifikasi
+                    </button>
                 </div>
                 <form method="get"
                       action="{% url 'main:show_projects' %}"
