@@ -42,6 +42,7 @@ def show_discography(request):
         "name": "Justin Lie",
         "discography_list": musics,
         "title_query": title_query,
+        "is_editor": request.user.groups.filter(name='Editor').exists(),
     }
     return render(request, "discography.html", context)
 
@@ -139,6 +140,7 @@ def show_experience(request):
         "name": "Justin Lie",
         "experience_list": experiences,
         "title_query": title_query,
+        "is_editor": request.user.groups.filter(name='Editor').exists(),
     }
     return render(request, "experience.html", context)
 

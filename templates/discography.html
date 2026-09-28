@@ -51,7 +51,7 @@
                                     {% if user.is_superuser %}
                                         {% include "components/discography_delete_modal.html" with music=music %}
                                     {% endif %}
-                                    {% if is_editor %}
+                                    {% if is_editor or user.is_superuser %}
                                         <a href="{% url 'main:edit_discography' music.id %}" class="button button-secondary">
                                             Edit
                                         </a>

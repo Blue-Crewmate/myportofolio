@@ -48,7 +48,7 @@
                                     {% if user.is_superuser %}
                                         {% include "components/project_delete_modal.html" with project=project %}
                                     {% endif %}
-                                    {% if is_editor %}
+                                    {% if is_editor or user.is_superuser %}
                                         <a href="{% url 'main:edit_project' project.id %}" class="button button-secondary">
                                             Edit
                                         </a>
