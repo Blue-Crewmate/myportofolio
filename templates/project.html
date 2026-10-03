@@ -17,9 +17,6 @@
                             Tambah Proyek
                         </button>
                     {% endif %}
-                    <button class="button button-secondary" onclick="showToast('Notifikasi Sistem', 'Project berhasil dimuat dengan baik!', 'success')">
-                        Test Toast Notifikasi
-                    </button>
                 </div>
                 <form id="project-search-form" class="project-search">
                     <input type="search"
@@ -114,6 +111,8 @@
             .replace('00000000-0000-0000-0000-000000000000', projectId);
         const starUrl = "{% url 'main:toggle_star_project' '00000000-0000-0000-0000-000000000000' %}"
             .replace('00000000-0000-0000-0000-000000000000', projectId);
+        const editUrl = "{% url 'main:edit_project' '00000000-0000-0000-0000-000000000000' %}"
+            .replace('00000000-0000-0000-0000-000000000000', projectId);
 
         const deleteHtml = IS_SUPERUSER 
             ? `<form method="post" action="${deleteUrl}" style="display:inline;">
@@ -122,11 +121,12 @@
             </form>`
             : '';
 
-        // TODO: buat edit button
-        // const editHtml = IS_SUPERUSER || IS_EDITOR
-        //     ? `<form>
-        //     </form>`
-        //     : '';
+        const editHtml = IS_SUPERUSER || IS_EDITOR
+            ? `<form method="get" action="${editUrl}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="button button-secondary">Edit</button>
+            </form>`
+            : '';
 
         const isStarredClass = project.is_starred ? " is-starred" : "";
         const starText = project.is_starred ? "Unstar" : "Star";
@@ -157,6 +157,7 @@
                         </button>
                     </form>
 
+                    ${editHtml}
                     ${deleteHtml}
                 </div>
             </div>
