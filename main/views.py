@@ -134,6 +134,7 @@ def show_experience(request):
         "name": "Justin Lie",
         "title_query": title_query,
         "is_editor": request.user.groups.filter(name='Editor').exists(),
+        "form": ExperienceForm(),
     }
     return render(request, "experience.html", context)
 
@@ -236,7 +237,7 @@ def toggle_star_experience(request, experience_id):
 
 @require_POST
 def create_experience_ajax(request):
-    if not request.user.is_superuser(): 
+    if not request.user.is_superuser: 
         return JsonResponse(
             {"message": "Hanya pemilik portofolio yang dapat menambahkan proyek."},
             status=403
