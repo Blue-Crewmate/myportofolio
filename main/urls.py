@@ -25,6 +25,7 @@ from main.views import (
     toggle_star_discography,
     create_project_ajax,
     create_experience_ajax,
+    create_discography_ajax,
 )
 app_name = "main"
 
@@ -50,6 +51,7 @@ urlpatterns = [
     path("discography/<uuid:music_id>/delete/", delete_discography, name="delete_discography"),
     path("discography/<uuid:music_id>/edit/", update_discography, name="edit_discography"),
     path("discography/<uuid:music_id>/star/", toggle_star_discography, name="toggle_star_discography",),
+    path("discography/add-ajax/", create_discography_ajax, name="create_discography_ajax"),
     path("register/", register, name="register"),
     path("login/", login_user, name="login"),
     path("logout/", logout_user, name="logout"),

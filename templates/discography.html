@@ -10,17 +10,17 @@
                 <div class="project-header">
                     <h1>Discography</h1>
                     {% if user.is_superuser %}
-                        <a href="{% url 'main:create_discography' %}"
-                        class="button project-add-button">
+                        <button type="button"
+                                class="button project-add-button"
+                                popovertarget="add-discography-modal">
                             <span aria-hidden="true">+</span>
                             Tambah Lagu
-                        </a>
+                        </button>
                     {% endif %}
                 </div>
-                <form method="get"
-                      action="{% url 'main:show_discography' %}"
-                      class="project-search">
+                <form id="discography-search-form" class="project-search">
                     <input type="search"
+                           id="search-input"
                            name="title"
                            value="{{ title_query }}"
                            placeholder="Cari berdasarkan nama lagu"
@@ -28,46 +28,247 @@
                            aria-label="Cari berdasarkan nama lagu">
                     <button type="submit" class="button">Cari</button>
                 </form>
-                <div class="experience-grid project-grid">
-                    {% for music in discography_list %}
-                        <article class="experience-card">
-                            {% if music.contain_audio %}
-                                <br>
-                                <iframe width="400" height="280" 
-                                    src="{{ music.audio }}" 
-                                    title="YouTube video player" 
-                                    frameborder="0" 
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                                    referrerpolicy="strict-origin-when-cross-origin" 
-                                    allowfullscreen>
-                                </iframe>
-                            {% endif %}
-                            <h2>{{ music.title }}</h2>
-                            <span class="experience-category">{{ music.genre }}</span>
-                            <p class="experience-description">{{ music.description }}</p>
-                            <div class="project-card-actions">
-                                <div class="project-actions">
-                                    {% include "components/discography_star.html" with music=music %}
-                                    {% if user.is_superuser %}
-                                        {% include "components/discography_delete_modal.html" with music=music %}
-                                    {% endif %}
-                                    {% if is_editor or user.is_superuser %}
-                                        <a href="{% url 'main:edit_discography' music.id %}" class="button button-secondary">
-                                            Edit
-                                        </a>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </article>
-                    {% empty %}
-                        {% if title_query %}
-                            <p class="empty-state">Tidak ada lagu dengan nama tersebut.</p>
-                        {% else %}
-                            <p class="empty-state">Belum ada lagu yang ditambahkan.</p>
-                        {% endif %}
-                    {% endfor %}
+
+                <!-- Loading State -->
+                <div id="loading" class="empty-state hide">
+                    <p>Memuat projects...</p>
                 </div>
+
+                <!-- Error State -->
+                <div id="error" class="empty-state hide">
+                    <p>Gagal memuat data projects. Silakan coba lagi.</p>
+                </div>
+
+                <!-- Empty State -->
+                <div id="empty" class="empty-state hide">
+                    <p>Belum ada proyek yang ditambahkan atau ditemukan.</p>
+                </div>
+
+                <!-- Project Grid -->
+                <div id="grid" class="experience-grid project-grid hide"></div>
+                
             </div>
         </section>
     </main>
+
+    {% if user.is_superuser %}
+        {% include "components/discography_form_modal.html" %}
+    {% endif %}
+
+    <script>
+    // Konfigurasi
+    const BASE_DISCOGRAPHY_ENDPOINT = "{% url 'main:get_discography_json' %}";
+    const IS_SUPERUSER = "{{ user.is_superuser|yesno:'true,false' }}" === "true";
+    let discographyAbortController;
+
+    const SEARCH_DEBOUNCE_DELAY = 300;
+    let searchDebounceTimer;
+
+    // Elemen DOM
+    const loadingState = document.getElementById('loading');
+    const errorState = document.getElementById('error');
+    const emptyState = document.getElementById('empty');
+    const gridContainer = document.getElementById('grid');
+    const searchForm = document.getElementById('discography-search-form');
+    const searchInput = document.getElementById('search-input');
+
+    // Menyembunyikan/Menampilkan section halaman
+    function displayPageSection({ showLoading = false, showError = false, showEmpty = false, showGrid = false }) {
+        loadingState.classList.toggle('hide', !showLoading);
+        errorState.classList.toggle('hide', !showError);
+        emptyState.classList.toggle('hide', !showEmpty);
+        gridContainer.classList.toggle('hide', !showGrid);
+    }
+
+    function escapeHtml(value) {
+        return String(value ?? '')
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#39;');
+    }
+
+    // Membuat elemen card discography
+    function buildProjectCardElement(item) {
+        const discography = item.fields;
+        const discographyId = item.pk;
+
+        const articleElement = document.createElement('article');
+        articleElement.className = 'experience-card';
+
+        const audioHtml = discography.audio
+            ? `<iframe width="400" height="280" 
+                        src="${escapeHtml(discography.audio)}" 
+                        title="YouTube video player" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        referrerpolicy="strict-origin-when-cross-origin" 
+                        allowfullscreen></iframe>`
+            : '';
+
+        // Dummy UUID digunakan untuk digantikan oleh ID asli dari data JSON
+        const deleteUrl = "{% url 'main:delete_discography' '00000000-0000-0000-0000-000000000000' %}"
+            .replace('00000000-0000-0000-0000-000000000000', discographyId);
+        const starUrl = "{% url 'main:toggle_star_discography' '00000000-0000-0000-0000-000000000000' %}"
+            .replace('00000000-0000-0000-0000-000000000000', discographyId);
+
+        const deleteHtml = IS_SUPERUSER 
+            ? `<form method="post" action="${deleteUrl}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="button button-danger" onclick="return confirm('Yakin ingin menghapus lagu ini?');">Hapus</button>
+            </form>`
+            : '';
+
+        const isStarredClass = discography.is_starred ? " is-starred" : "";
+        const starText = discography.is_starred ? "Unstar" : "Star";
+        const starTitle = discography.star_count > 0 
+            ? `Dibintangi oleh ${escapeHtml(discography.starred_by_names)}` 
+            : "Jadilah yang pertama memberi star";
+
+        // Komponen card
+        const completeCardHtml = `
+            ${audioHtml}
+            <h2>${escapeHtml(discography.title)}</h2>
+            <span class="experience-category">${escapeHtml(discography.genre)}</span>
+            <p class="experience-description">${escapeHtml(discography.description)}</p>
+            <div class="project-card-actions">
+                <div class="project-actions">
+
+                    <form method="post" action="${starUrl}" class="star-form">
+                        {% csrf_token %}
+                        <button type="submit" 
+                                class="button button-star${isStarredClass}"
+                                title="${starTitle}">
+                            <span aria-hidden="true">★</span>
+                            ${starText}
+                            <span class="star-count">${discography.star_count}</span>
+                        </button>
+                    </form>
+
+                    ${deleteHtml}
+                </div>
+            </div>
+        `;
+
+        articleElement.innerHTML = completeCardHtml;
+        return articleElement;
+    }
+
+    async function fetchDiscography(searchQuery = "") {
+        if (discographyAbortController) discographyAbortController.abort();
+        discographyAbortController = new AbortController();
+
+        try {
+            displayPageSection({ showLoading: true });
+            
+            const url = searchQuery ? `${BASE_DISCOGRAPHY_ENDPOINT}?title=${encodeURIComponent(searchQuery)}` : BASE_DISCOGRAPHY_ENDPOINT;
+            
+            const response = await fetch(url, {
+                headers: { 'Accept': 'application/json' },
+                signal: discographyAbortController.signal,
+            });
+
+            if (!response.ok) throw new Error('Failed to fetch data');
+
+            const discographyData = await response.json();
+
+            if (discographyData.length === 0) {
+                displayPageSection({ showEmpty: true });
+            } else {
+                gridContainer.innerHTML = '';
+                discographyData.forEach(item => {
+                    gridContainer.appendChild(buildProjectCardElement(item));
+                });
+                displayPageSection({ showGrid: true });
+            }
+        } catch (error) {
+            if (error.name === 'AbortError') return;
+            console.error('Error loading discography:', error);
+            displayPageSection({ showError: true });
+        }
+    }
+
+    function searchDiscography() {
+        fetchDiscography(searchInput.value.trim());
+    }
+
+    searchInput.addEventListener("input", function() {
+        clearTimeout(searchDebounceTimer);
+
+        searchDebounceTimer = setTimeout(function() {
+            searchDiscography();
+        }, SEARCH_DEBOUNCE_DELAY);
+    });
+
+    searchForm.addEventListener("submit", function(event) {
+        event.preventDefault();
+        clearTimeout(searchDebounceTimer);
+        searchDiscography();
+    });
+
+    function closeDiscographyModal() {
+        document.getElementById("add-discography-modal").hidePopover();
+    }
+
+    const CREATE_DISCOGRAPHY_ENDPOINT = "{% url 'main:create_discography_ajax' %}";
+    const discographyForm = document.getElementById('discography-form');
+
+    // Membaca nilai cookie, digunakan untuk mengambil token CSRF
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // Mengirim data form ke server
+    async function addDiscography(event) {
+        event.preventDefault();
+
+        const submitButton = discographyForm.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
+
+        try {
+            const response = await fetch(CREATE_DISCOGRAPHY_ENDPOINT, {
+                method: 'POST',
+                headers: { 'X-CSRFToken': getCookie('csrftoken') },
+                body: new FormData(discographyForm),
+            });
+            const result = await response.json().catch(() => ({}));
+
+            if (response.ok) {
+                discographyForm.reset();
+                closeDiscographyModal();
+                showToast('Berhasil', 'Lagu baru berhasil ditambahkan!', 'success');
+                fetchDiscography(searchInput.value.trim());
+            } else {
+                const errorMessages = result.errors
+                    ? Object.values(result.errors).flat().map(error => error.message)
+                    : [result.message || `Terjadi kesalahan (status ${response.status}).`];
+                showToast('Gagal menambahkan lagu', errorMessages.join(' '), 'error');
+            }
+        } catch (error) {
+            console.error('Error adding music:', error);
+            showToast('Gagal menambahkan lagu', 'Tidak dapat terhubung ke server. Silakan coba lagi.', 'error');
+        } finally {
+            submitButton.disabled = false;
+        }
+    }
+
+    if (discographyForm) {
+        discographyForm.addEventListener('submit', addDiscography);
+    }
+
+    // Start application
+    fetchDiscography(searchInput.value.trim());
+    </script>
 {% endblock content %}

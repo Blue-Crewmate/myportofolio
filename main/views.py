@@ -31,19 +31,13 @@ def show_main(request):
 
 # Discography Views
 def show_discography(request):
-    json_response = get_discography_json(request)
-    musics = serializers.deserialize(
-        "json",
-        json_response.content.decode("utf-8"),
-    )
-    musics = [music.object for music in musics]
     title_query = request.GET.get("title", "").strip()
         
     context = {
         "name": "Justin Lie",
-        "discography_list": musics,
         "title_query": title_query,
         "is_editor": request.user.groups.filter(name='Editor').exists(),
+        "form": DiscographyForm(),
     }
     return render(request, "discography.html", context)
 
@@ -67,15 +61,30 @@ def create_discography(request):
 
 def get_discography_json(request):
     title_query = request.GET.get("title", "").strip()
-    music_list = Music.objects.all()
+    music_list = Music.objects.prefetch_related("starred_by").all()
 
     if title_query:
         music_list = music_list.filter(title__icontains=title_query)
 
-    music_json = serializers.serialize(
-        "json", music_list, use_natural_foreign_keys=True
-    )
-    return HttpResponse(music_json, content_type="application/json")
+    data = []
+    for music in music_list:
+        starred_users = music.starred_by.all()
+        is_starred = request.user in starred_users if request.user.is_authenticated else False
+        starred_by_names = ", ".join([u.username for u in starred_users])
+
+        data.append({
+            "pk": str(music.id),
+            "fields": {
+                "title": music.title,
+                "description": music.description,
+                "genre": music.genre,
+                "audio": music.audio,
+                "star_count": starred_users.count(),
+                "is_starred": is_starred,
+                "starred_by_names": starred_by_names,
+            }
+        })
+    return JsonResponse(data, safe=False)
 
 @login_required(login_url="/login/")
 def delete_discography(request, music_id):
@@ -125,6 +134,23 @@ def toggle_star_discography(request, music_id):
 
     return redirect("main:show_discography")
 
+@require_POST
+def create_discography_ajax(request):
+    if not request.user.is_superuser:
+        return JsonResponse(
+            {"message": "Hanya pemilik portofolio yang dapat menambahkan lagu."},
+            status=403,
+        )
+
+    form = DiscographyForm(request.POST)
+    if form.is_valid():
+        music = form.save()
+        return JsonResponse(
+            {"message": "Lagu berhasil ditambahkan.", "pk": str(music.id)},
+            status=201,
+        )
+
+    return JsonResponse({"errors": form.errors.get_json_data()}, status=400)
 
 # Experience Views
 def show_experience(request):

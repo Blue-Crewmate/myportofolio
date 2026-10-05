@@ -1,0 +1,44 @@
+<div id="add-discography-modal"
+     class="project-form-modal"
+     popover="auto"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="add-project-modal-title">
+    <button type="button"
+            class="project-form-modal__backdrop"
+            popovertarget="add-discography-modal"
+            popovertargetaction="hide"
+            aria-label="Tutup form tambah lagu"></button>
+
+    <div class="project-form-modal__content">
+        <button type="button"
+                class="project-form-modal__close"
+                popovertarget="add-discography-modal"
+                popovertargetaction="hide"
+                aria-label="Tutup form tambah lagu">×</button>
+
+        <h2 id="add-project-modal-title">Tambah Pengalaman Baru</h2>
+        <form id="discography-form"
+              method="post"
+              action="{% url 'main:create_discography' %}"
+              class="discography-form">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% for error in field.errors %}
+                        <p class="form-error">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            <div class="project-form-modal__actions">
+                <button type="button"
+                        class="button button-secondary"
+                        popovertarget="add-discography-modal"
+                        popovertargetaction="hide">Batal</button>
+                <button type="submit" class="button">Tambah Lagu</button>
+            </div>
+        </form>
+    </div>
+</div>
