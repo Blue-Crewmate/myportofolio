@@ -79,3 +79,28 @@ Dalam pengerjaan tugas 4 ini, saya menggunakan ChatGPT sebagai alat bantu dalam 
 
 Berikut tertera salah satu hasil prompting yang saya lakukan ke ChatGPT:
 >https://chatgpt.com/share/6aba17d1-e750-83ec-971d-f459d28efbc8
+
+### Tugas 5
+
+1. Debouncing adalah teknik untuk menunda eksekusi dari suatu fungsi dengan suatu jeda waktu tanpa ada event baru lain. Dalam fitur pencarian berbasis AJAX, hal ini penting untuk diimplementasi karena sistem AJAX yang akan melakukan request secara asinkronus selama terjadi suatu event. Saat pengguna mengetik judul pada kolom pencarian, setiap huruf yang diketik terhitung sebagai event individu. Apabila tidak diterapkan debouncing, kolom pencarian akan melakukan request setiap kali ada perubahan pada kolom pencarian. 
+
+2. Saat sebuah fungsi async menggunakan fetch(), syntax "await" perlu digunakan karena "await" menandakan bahwa fungsi tersebut harus menunggu hingga fungsi fetch() selesai memproses "Promise" untuk melanjutkan sisa kode. Apabila syntax "await" tidak digunakan pada fungsi async, fungsi tersebut akan langsung dieksekusi tanpa menunggu adanya hasil/perubahan akibat fungsi fetch().
+
+3. Serangan XSS (Cross-Site Scripting) adalah serangan saat penyerang menyisipkan kode JavaScript miliknya ke dalam webpage browser pengguna lain. Salah satu bentuk dari serangan XSS adalah penyerang memasukkan kode JavaScript ke dalam database website, lalu kode dijalankan setiap kali website membuka halaman yang meminta database tersebut. Sistem AJAX/JavaScript lebih rentan terhadap tipe serangan ini karena sistem AJAX/JavaScript tidak memiliki fitur escaping yang mengubah data menjadi teks literal yang tidak akan dijalankan oleh HTML. Oleh sebab itu, developer perlu mengimplementasikan fungsi tersebut secara manual untuk mencegah serangan XSS.Di sisi lain, Template Django menyediakan fitur escaping dalam bentuk "{{ }}" yang dapat mengubah ">" dan "<" menjadi teks biasa. 
+
+#### AI Disclosure
+
+Dalam pengerjaan tugas 5 ini, saya menggunakan Copilot sebagai alat bantu dalam melakukan debugging pada kode yang tidak kunjung muncul pada webpage. Panduan dan referensi dari tutorial 5 sudah cukup untuk saya memahami implementasi dari AJAX dan JavaScript dalam website. Sayangnya, beberapa kali saya mencoba untuk mengaplikasikan apa yang telah saya pelajari dari tutorial dan hasilnya error yang saya tidak dapat temukan. Akhirnya, sebagai bantuan terakhir, saya meminta tolong Copilot di VSCode untuk membantu melacak tempat bug/error serta menjelaskan mengapa error tersebut dapat terjadi. Alhasil, saya belajar bahwa saya harus lebih teliti dalam menuliskan penamaan ID dan class pada HTML Tags sehingga error tidak akan mudah terjadi. 
+
+Berikut salah satu hasil prompting yang saya lakukan dengan Copilot untuk mencari error:
+
+Prompt: 
+>When i call editHtml on a certain data in the model database, the already filled in data did not appear. Why and where is the bug?
+
+Result:
+>The bug is in the generated edit form in experience.html: it submits with method="post".
+>
+>That sends an empty POST when you click Edit. In views.py, update_experience uses ExperienceForm(request.POST or None, instance=experience). Because the POST is non-empty (it contains the CSRF token), Django treats the form as bound to submitted data, so the fields show the empty submission rather than the experience’s saved values.
+>
+>The form is intended to display existing data before you submit changes. The project edit form uses method="get" in project.html, which lets the view render an unbound form populated from the model instance. Changing the experience edit form to GET should make the saved values appear.
+
