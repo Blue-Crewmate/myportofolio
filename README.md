@@ -4,6 +4,16 @@ Kelas : PBP B
 
 Second Year at Fasilkom UI
 
+## Tutor Set Up Local Server
+
+1. Git clone this repo to local drive.
+2. Set up a Python Virtual Environment.
+3. Execute `python manage.py migrate` on the terminal.
+4. Execute `python manage.py check` on the terminal to check for errors.
+5. To activate the server, execute `python manage.py runserver` on the terminal.
+
+## Reflective Questions
+
 ### Tugas 1
 
 1. Dalam pengembangan website di tugas 1 ini, saya hanya baru menggunakan element "section" yang berguna untuk memisahkan bagian website yang tidak berkaitan dengan satu sama lain, seperti profile dan discography (masing-masing section memiliki inti tersendiri). Sayangnya, saya belum memiliki keperluan untuk mengimplementasikan "aside" ataupun "article". Hal ini karena "aside" berguna untuk menandai konten pendukung dalam suatu section, sedangkan "article" berguna untuk menandai teks yang dapat berdiri sendiri tanpa context dari websitenya. Dengan adanya element semantic ini, pengembangan website akan jauh lebih rapi karena dapat ditandai pembagian dari content web dan bukan hanya menggunakan "div" yang terlalu general.
