@@ -168,15 +168,17 @@
         try {
             const fields = new FormData(projectForm);
             const payload = Object.fromEntries([
-                'title', 'description', 'tech_stack', 'project_url', 'project_image_url',
+                'title', 'description', 'category', 'thumbnail',
             ].map(name => [name, fields.get(name)]));
+            const endedAt = fields.get('ended_at');
+            payload.ended_at = endedAt ? `${endedAt}T00:00:00` : null;
             await writeProject(BASE_EXPERIENCES_ENDPOINT, 'POST', payload);
             projectForm.reset();
-            document.getElementById('add-project-modal').hidePopover();
-            showToast('Success', 'Project created.', 'success');
+            document.getElementById('add-experience-modal').hidePopover();
+            showToast('Success', 'Experience created.', 'success');
             await fetchProjects(searchInput.value.trim());
         } catch (error) {
-            showToast('Could not create project', error.message, 'error');
+            showToast('Could not create experience', error.message, 'error');
         } finally {
             button.disabled = false;
         }

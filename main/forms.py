@@ -124,7 +124,7 @@ class ExperienceForm(ModelForm):
             ),
             "ended_at": DateInput(
                 attrs={
-                    "placeholder": "DD-MM-YYYY",
+                    "placeholder": "YYYY-MM-DD",
                 }
             ),
             

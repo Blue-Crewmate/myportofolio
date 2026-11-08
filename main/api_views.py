@@ -118,3 +118,57 @@ def experience_star(request, experience_id):
         experience.starred_by.add(request.user)
     serializer = ExperienceSerializer(experience, context={"request": request})
     return Response(serializer.data)
+
+@api_view(["GET", "HEAD", "POST"])
+@authentication_classes([SessionAuthentication])
+@permission_classes([IsPortfolioOwnerOrReadOnly])
+def music_list(request):
+    if request.method in ("GET", "HEAD"):
+        musics = Music.objects.prefetch_related("starred_by").order_by("title", "id")
+        title = request.query_params.get("title", "").strip()
+        if title:
+            musics = musics.filter(title__icontains=title)
+        serializer = MusicSerializer(
+            musics, many=True, context={"request": request},
+        )
+        return Response(serializer.data)
+
+    serializer = MusicSerializer(data=request.data, context={"request": request})
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+@api_view(["GET", "HEAD", "PUT", "PATCH", "DELETE"])
+@authentication_classes([SessionAuthentication])
+@permission_classes([IsPortfolioOwnerOrReadOnly])
+def music_detail(request, music_id):
+    music = get_object_or_404(
+        Music.objects.prefetch_related("starred_by"), pk=music_id,
+    )
+    if request.method in ("GET", "HEAD"):
+        serializer = MusicSerializer(music, context={"request": request})
+        return Response(serializer.data)
+
+    if request.method == "DELETE":
+        music.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    serializer = MusicSerializer(
+        music, data=request.data, partial=request.method == "PATCH",
+        context={"request": request},
+    )
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    return Response(serializer.data)
+
+@api_view(["POST"])
+@authentication_classes([SessionAuthentication])
+@permission_classes([IsAuthenticated])
+def music_star(request, music_id):
+    music = get_object_or_404(Music, pk=music_id)
+    if music.starred_by.filter(pk=request.user.pk).exists():
+        music.starred_by.remove(request.user)
+    else:
+        music.starred_by.add(request.user)
+    serializer = ExperienceSerializer(music, context={"request": request})
+    return Response(serializer.data)
