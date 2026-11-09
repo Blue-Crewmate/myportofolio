@@ -114,3 +114,15 @@ Result:
 >
 >The form is intended to display existing data before you submit changes. The project edit form uses method="get" in project.html, which lets the view render an unbound form populated from the model instance. Changing the experience edit form to GET should make the saved values appear.
 
+### Tugas 6
+
+1. REST (Representational State Transfer) adalah tipe arsitektur API dimana data diperlakukan sebagai resource dan memiliki uniform interface, HTTP method menyatakan tindakan tanpa ditulis di URL dan klien-server tidak menyimpan state dari user untuk setiap transaksi. Mengembalikan JSON dari views.py belum dikatakan RESTful, karena JSON yang dikirim dan diterima masih memuat state dari user dan bukan raw data saja. HTTP method `PUT` dan `PATCH` melakukan hal yang sama yaitu mengubah data yang sudah ada di database melalui API. Perbedaannya adalah `PUT` akan mengubah semua field pada objek data yang dituju dan dapat membuat objek data baru apabila data yang ingin diubah tidak ada. Di sisi lain, `PATCH` hanya dapat mengubah beberapa field pada objek data yang dituju. Apabila objek yang dituju tidak ada, maka request tersebut akan mengembalikan error. 
+
+2. Peran *serializer* pada Django REST Framework adalah melakukan parsing pada Django Model Instance/Object yang tersimpan di database untuk diubah menjadi JSON. JSON inilah yang nanti dikirimkan dengan HTTP response kembali ke user browser. Salah satu keuntungannya dibandingkan merakit dictionary untuk JSON secara manual adalah adanya fungsi validation data yang dapat ditambahkan pada class Serializer serta built-in deserializer. 
+
+3. Authentikasi digunakan untuk mengenali siapa user yang sedang menggunakan webnya, sedangkan otorisasi digunakan untuk membatasi fitur seperti edit dan delete untuk user-user tertentu saja. Dalam DRF, authentikasi ditangani oleh class user bawaan Django, sedangkan otorisasi dapat diatur menggunakan custom permission class. Hak akses tetap perlu diperiksa dengan Permission class pada fungsi-fungsi di views walaupun tomobol sudah dihilangkan karena walau sudah dihilangkan, apabila user sudah terlebih dahulu mengetahui url untuk melakukan edit/delete pada suatu data, user yang belum terauthentikasi dan diberikan otorisasi dapat mengubah data-data sensitif tersebut.
+
+4. Request untuk mengubah data masih perlu menggunakan CSRF token ketika API sudah menggunakan SessionAuthentication karena SessionAuthentication menggunakan CSRF token yang diberikan oleh browser, sehingga di sisi server perlu ada authentikasi lanjut untuk memastikan bahwa token yang diberikan valid sebelum mengirimkan kembali response. `force_authenticate` tidak dapat membuktikan bahwa keamanan CSRF berjalan dengan baik karena fungsi `force_autheticate` melakukan mem-*bypass* mekanisme authentikasi django dalam memanggil views function, sehingga fungsi CSRF tidak dapat dites dengan baik.
+
+#### AI Disclosure
+
