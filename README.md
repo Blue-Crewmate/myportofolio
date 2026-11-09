@@ -126,3 +126,12 @@ Result:
 
 #### AI Disclosure
 
+Dalam pengerjaan tugas 6 ini, saya menggunakan Copilot sebagai alat bantu dalam melakukan debugging pada model yang tidak dapat di tambah objek baru atau menghapus objek. Dengan Copilot, aku menemukan sebuah typo berupa salah penggunaan model pada salah satu fungsi pada api_views.py. Walaupun menggunakan AI, panduan dan referensi dari tutorial 7 sudah cukup untuk saya memahami cara kerja arsitektur REST dan implementasinya pada Django REST Framework. 
+
+Berikut salah satu hasil prompting yang saya lakukan dengan Copilot untuk mencari error:
+
+Prompt: 
+> When adding a new experience, "### Could not create project Cannot read properties of null (reading 'hidePopover')" appears. Why does this happen and how can i fix it?
+
+Result:
+> The experience POST succeeds, but then the page tries to close add-project-modal. That element isn’t on the page—the actual modal is add-experience-modal—so getElementById returns null, and calling hidePopover() throws. Since this happens after the POST, the experience may already have been created; check the list before trying again to avoid a duplicate.
